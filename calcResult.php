@@ -160,23 +160,6 @@ session_start();
         </tr>
     </table>
 </body>
-<?php
-/*include("dataBase.php");
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $curStock = $_SESSION['curStk'] ?? [];
-    foreach($curStock as $stk) {
-        $stmt = $conn->prepare("INSERT INTO `users history` (`Current Stock`)
-        VALUES(?)");
-        $stmt->bind_param("i", $stk);
-        $stmt->execute();
-    }
-    $earnings = $_SESSION['earn'] ?? [];
-    foreach($earnings as $earn) {
-        $earned[] = $earn;
-     }
-    $stmt->close();
-}*/
-?>
 </html>
         <style>
         body table{
