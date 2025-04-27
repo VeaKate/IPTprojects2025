@@ -1,0 +1,91 @@
+#title{
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bolder;
+    font-size: 60px;
+}
+.MainContainer{
+    text-align: center;
+    padding: 50px;
+}
+.button1{
+    font-size: 40px;
+    padding: 25px;
+    border-radius: 25px;
+}
+#b1:hover{
+    background-color: rgb(18, 196, 18);
+    font-weight: bold;
+    color: whitesmoke;
+    cursor: pointer;
+}
+#b2:hover{
+    background-color: rgb(218, 60, 60);
+    font-weight: bold;
+    color: whitesmoke;
+    cursor: pointer;
+}
+.main{
+    background-image: url(1393343.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.log_in_page{
+    background-image: url(images.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.log_in_container{
+    background-color: black;
+    color: white;
+    width: 50%;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    display: block;
+    font-size: 25px;
+    border-radius: 25px;
+    overflow: hidden;
+}
+.textbox{
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 20px;
+}
+.log_in_page_buttons{
+    font-size: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    width:
+    250px;
+}
+#log_in:hover{
+    background-color: aqua;
+    cursor: pointer;
+    font-weight: bold;
+}
+#log_in{
+    background-color: rgb(73, 236, 73);
+}
+#back{
+    background-color: rgb(116, 5, 5);
+}
+#back:hover{
+    background-color: rgb(255, 87, 87);
+    cursor: pointer;
+    font-weight: bold;
+}
+.v2{
+  color: rgb(212, 110, 110); 
+}
+v{
+    background-color: rgb(158, 247, 24);
+}
+e{
+    background-color: rgb(22, 233, 22);
+}
