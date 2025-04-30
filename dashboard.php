@@ -114,11 +114,10 @@
             </table>
         </div>
         </form>
-       <a href="calcResult.php"><button id="calcButton">Calculate</button></a>
+       <a href="verification.php"><button id="calcButton">Calculate</button>
     </main>
 </body>
 </html>
-
 <style>
     aside{
     float: left;
