@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
+    <link rel="icon" type="image/png" href="newLogo.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="log_in_page">
@@ -37,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["log_in"])) {
         if (mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             $_SESSION["username"] = $username;
+            $_SESSION["password"] = $password;
             header("location: dashboard.php");
         } else {
             echo "Credentials not found! 😥";
