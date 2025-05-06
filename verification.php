@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify</title>
+    <link rel="icon" type="image/png" href="newLogo.png">
 </head>
 <body style="text-align: center;color: white; margin-top: 0px; 
         margin: 0%; float: center; background-color: rgb(0, 128, 107);">
