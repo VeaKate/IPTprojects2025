@@ -1,5 +1,12 @@
 <?php
 session_start();
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+    if (!isset($_SESSION["username"])) {
+        header("Location: main.php"); 
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +17,13 @@ session_start();
     <link rel="icon" type="image/png" href="newLogo.png">
 </head>
 <body align="center">
-    <a href="dashboard.php"> <button title="back" style="border: none; font-size: 40px; background-color: 
-    white; float: inline-end; margin-top: 0%; margin-right: 0%;">⏩</button></a>
+    <a href="dashboard.php"> 
+        <button title="back" style="border: none; font-size: 20px; background-color: white; 
+    position: fixed; top: 20px; left: 20px; padding: 10px 20px; border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); cursor: pointer;">
+     Back
+</button>
+    </a>
     <sup style="margin-right: 30px;">
         <?php
         if (isset($_SESSION["Date/Time"], $_SESSION["City"])) {
@@ -43,20 +55,8 @@ session_start();
                 include("dataBase.php");
                 if (isset($_SESSION['product_name'])) {
                     $products = $_SESSION['product_name'];
-                    
-                        foreach ($products as $input) {
-                            $email = $_SESSION["username"];
-                            $date_time = $_SESSION["Date/Time"];
-                            $city = $_SESSION["City"];
-                            echo "<h6>" . htmlspecialchars($input) . "</h6>";
-                            try{
-                            $stmt = $conn->prepare("INSERT INTO `products` (`Email`, `Date/Time`, `City`, `Product Name`)
-                            VALUES(?, ?, ?, ?)");
-                            $stmt->bind_param("ssss", $email, $date_time, $city, $input);
-                            $stmt->execute();
-                            $stmt->close();
-                        } catch (mysqli_sql_exception $e) {
-                        }
+                    foreach ($products as $input) {
+                        echo "<h6>" . htmlspecialchars($input) . "</h6>";
                     }
                 }
                 ?>
@@ -71,18 +71,7 @@ session_start();
                         $sold = (int)$_SESSION['sold'][$index];
                         $currentStock = $stock - $sold;
                         $totalCurrentStock += $currentStock;
-                        $email = $_SESSION["username"];
-                        $date_time = $_SESSION["Date/Time"];
-                        $city = $_SESSION["City"];
                         echo "<h6>" . htmlspecialchars($currentStock) . "</h6>";
-                       try{
-                        $stmt = $conn->prepare("INSERT INTO `stocks` (`Email`, `Date/Time`, `City`, `Stocks`)
-                        VALUES(?, ?, ?, ?)");
-                        $stmt->bind_param("sssi", $email, $date_time, $city, $currentStock);
-                        $stmt->execute();
-                        $stmt->close();
-                       } catch(mysqli_sql_exception $e) {
-                       }
                     }
                     $_SESSION['curStock'] = $totalCurrentStock;
                 }
@@ -98,18 +87,7 @@ session_start();
                         $sold = (double)$_SESSION['sold'][$index];
                         $earnings = $price * $sold;
                         $totalEarnings += $earnings;
-                        $email = $_SESSION["username"];
-                        $date_time = $_SESSION["Date/Time"];
-                        $city = $_SESSION["City"];
                         echo "<h6>" . htmlspecialchars($earnings) . "</h6>";
-                        try{
-                            $stmt = $conn->prepare("INSERT INTO `earnings` (`Email`, `Date/Time`, `City`, `Earnings`)
-                            VALUES(?, ?, ?, ?)");
-                            $stmt->bind_param("sssd", $email, $date_time, $city, $earnings);
-                            $stmt->execute();
-                            $stmt->close();
-                           } catch(mysqli_sql_exception $e) {
-                           }
                     }
                     $_SESSION['earned'] = $totalEarnings;
                 }
@@ -123,19 +101,8 @@ session_start();
                     foreach ($_SESSION['sold'] as $input) {
                         $totalSold += $input;
                         echo "<h6>" . htmlspecialchars($input) . "</h6>";
-                        $email = $_SESSION["username"];
-                        $date_time = $_SESSION["Date/Time"];
-                        $city = $_SESSION["City"];
-                        try{
-                            $stmt = $conn->prepare("INSERT INTO `sold` (`Email`, `Date/Time`, `City`, `Sold`)
-                            VALUES(?, ?, ?, ?)");
-                            $stmt->bind_param("sssi", $email, $date_time, $city, $input);
-                            $stmt->execute();
-                            $stmt->close();
-                           } catch(mysqli_sql_exception $e) {
-                           }
-                    }
                     $_SESSION['slod'] = $totalSold;
+                    }
                 }
                 ?>
             </td>
@@ -161,40 +128,89 @@ session_start();
     </table>
 </body>
 </html>
-        <style>
-        body table{
-            text-align: center;
-            margin: auto;
-        }
-        sup {
-            display: inline-block;
-        }
-        .backB button {
-            float: left;
-            padding: 0;
-            font-size: 50px;
-            background-color: white;
-            border: none;
-            margin-left: -850px;
-            margin-top: -30px;
-        }
-        img {
-            height: 80px;
-            border: 2px solid;
-            border-radius: 50%;
-            width: 90px;
-            display: inline-block;
-        }
-        div {
-            display: inline-block;
-        }
-        .head {
-            display: block;
-        }
-        table {
-            border: none;
-        }
-        sup {
-            float: right;
-        }
-    </style>
+
+<?php
+if(isset($_SESSION["username"], $_SESSION["curStock"], $_SESSION["earned"], $_SESSION["slod"], $_SESSION["Date/Time"], $_SESSION["City"])) {
+    $KEY = "oihdobvj784734qoryqt7tw9w47tw9w7tw8w9";
+    $ch = curl_init('http://localhost/apidatabase/transactions.php'); 
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+        'username' => $_SESSION["username"],
+        'Product_Stocks' => $_SESSION["curStock"],
+        'Daily_Earnings' => $_SESSION["earned"],
+        'Daily_Sold_Out' => $_SESSION["slod"],
+        'Date' => $_SESSION["Date/Time"],
+        'City' => $_SESSION["City"],
+        'API_Key' => $KEY
+    ]));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+    ]);
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        echo 'Curl error: ' . curl_error($ch);
+    }
+    curl_close($ch);
+}
+?>
+
+<style>
+    body table{
+        text-align: center;
+        margin: auto;
+        width: 90%;
+        max-width: 1200px;
+        border-spacing: 0;
+    }
+    sup {
+        display: inline-block;
+    }
+    .backB button {
+        float: left;
+        padding: 0;
+        font-size: 50px;
+        background-color: white;
+        border: none;
+        margin-left: -850px;
+        margin-top: -30px;
+    }
+    img {
+        height: 80px;
+        border: 2px solid;
+        border-radius: 50%;
+        width: 90px;
+        display: inline-block;
+    }
+    div {
+        display: inline-block;
+    }
+    .head {
+        display: block;
+        margin-top: 20px;
+    }
+    table {
+        border: none;
+        width: 100%;
+        margin-top: 20px;
+    }
+    th, td {
+        padding: 15px;
+        text-align: center;
+        font-size: 20px;
+    }
+    th {
+        background-color: #f1f1f1;
+    }
+    td {
+        background-color: #fff;
+        font-size: 18px;
+    }
+    td h6 {
+        margin: 0;
+    }
+    sup {
+        float: right;
+    }
+</style>
